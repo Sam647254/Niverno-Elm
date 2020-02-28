@@ -1,5 +1,7 @@
 module Prototypes exposing (..)
 
+import Set exposing (Set)
+
 
 type Enumerability
     = Countable
@@ -30,12 +32,35 @@ type Associability
     | Intrinsic
 
 
-type alias Noun =
-    { enumerability : Enumerability
-    , associability : Associability
-    , flavour : Flavour
-    , stem : String
-    , glossTerm : String
-    , meaning : String
-    , rootStems : Set String
-    }
+type Direction
+    = Bidirectional
+    | Unidirectional
+
+
+type Prototype
+    = Noun
+        { enumerability : Enumerability
+        , associability : Associability
+        , flavour : Flavour
+        , stem : String
+        , glossTerm : String
+        , meaning : String
+        , rootStems : Set String
+        }
+    | Verb
+        { receiver : Receiver
+        , valency : Valency
+        , instantaneous : Bool
+        , integral : Bool
+        , creation : Bool
+        , stem : String
+        , meaning : String
+        , rootStems : Set String
+        , argumentMeanings : List String
+        }
+    | Relationship
+        { direction : Direction
+        , forwardMeaning : String
+        , reverseMeaning : Maybe String
+        , rootStems : Set String
+        }
