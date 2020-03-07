@@ -1,7 +1,6 @@
 module Derivations exposing (..)
 
--- Words in prose may either be prototype + inflection or
--- prototype + derivation + inflection
+-- Words are of the format (stem)(derivation)*(inflection)
 
 type Inflection
     -- Noun infletions
@@ -31,3 +30,8 @@ type Derivation
     -- Relationship derivations
     | Forward -- "is mother of" or "is friend of" -- verb
     | Reverse -- "is child of" (not available for bidirectional relationships) -- verb
+
+type alias DerivedPrototype =
+    { base : Prototype
+    , derivations: List Derivation}
+    
