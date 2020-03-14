@@ -1,7 +1,13 @@
-module Derivations exposing (..)
+module Derivations exposing
+    ( Derivation(..)
+    , DerivedPrototype
+    , Inflection(..)
+    , derivationsOf
+    , inflectionsOf
+    )
 
+import EverySet exposing (EverySet)
 import Prototypes exposing (..)
-import Set exposing (Set)
 
 
 
@@ -16,6 +22,7 @@ type
     | Anaphor -- "the (previously mentioned) apple"
     | Archetype -- "apples" as in "I like apples"
     | Associated -- "my apple(s)"
+    | Detached
       -- Verb inflections
     | StartImperative -- "eat!"
     | StopImperative -- "stop eating!"
@@ -47,11 +54,51 @@ type alias DerivedPrototype =
     }
 
 
-isDerivationOf : Prototype -> Derivation -> Bool
-isDerivationOf prototype derivation =
-    False
+derivationsOf : Prototype -> EverySet Derivation
+derivationsOf prototype =
+    []
+        |> EverySet.fromList
 
 
-isInflectionOf : Prototype -> Inflection -> Bool
-isInflectionOf prototype inflection =
-    False
+inflectionsOf : Prototype -> EverySet Inflection
+inflectionsOf prototype =
+    let
+        inflections =
+            case prototype of
+                Noun noun ->
+                    let
+                        commonInflections =
+                            [ Specific ]
+
+                        enumerabilityInflections =
+                            case noun.enumerability of
+                                Countable ->
+                                    [ Nonspecific, Archetype, Anaphor ]
+
+                                Singleton ->
+                                    []
+
+                                Mass ->
+                                    []
+
+                        associabilityInflections =
+                            case noun.associability of
+                                Common ->
+                                    []
+
+                                Associable ->
+                                    [ Associated ]
+
+                                Intrinsic ->
+                                    [ Detached ]
+                    in
+                    [ commonInflections
+                    , enumerabilityInflections
+                    , associabilityInflections
+                    ]
+                        |> List.concat
+
+                _ ->
+                    []
+    in
+    EverySet.fromList inflections

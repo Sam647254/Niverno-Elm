@@ -3,6 +3,7 @@ module DerivationsTest exposing (..)
 import Debug exposing (toString)
 import Derivations exposing (..)
 import Dictionary.TestDictionary exposing (..)
+import EverySet
 import Expect exposing (Expectation)
 import Fuzz exposing (Fuzzer, int, list, string)
 import Test exposing (..)
@@ -15,7 +16,6 @@ suite =
             let
                 derivations =
                     [ Nonspecific, Specific, Anaphor, Archetype, Associated ]
+                        |> EverySet.fromList
             in
-            derivations
-                |> List.filter (\d -> isInflectionOf apple d)
-                |> Expect.equalLists derivations
+            Expect.equal derivations (inflectionsOf apple)
